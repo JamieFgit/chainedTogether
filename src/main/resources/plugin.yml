@@ -1,0 +1,9 @@
+name: tutorial13
+version: '1.0-SNAPSHOT'
+main: me.jamieflanagan.tutorial13.Tutorial13
+api-version: '1.21'
+commands:
+  chaingroup:
+    description: chained together commands
+    usage: </command>
+

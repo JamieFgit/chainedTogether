@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="tutorial13:jar">
+    <output-path>$USER_HOME$/Desktop/minecraft stuff/server/SPIGOT/plugins</output-path>
+    <root id="archive" name="tutorial13.jar">
+      <element id="module-output" name="tutorial13" />
+    </root>
+  </artifact>
+</component>
