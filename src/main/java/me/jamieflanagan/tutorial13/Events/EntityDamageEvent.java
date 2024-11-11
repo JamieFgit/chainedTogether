@@ -18,15 +18,9 @@ public class EntityDamageEvent implements Listener {
 
     public void handle(org.bukkit.event.entity.EntityDamageEvent event){
 
-        for (Player player : logic.getStands().keySet()){
-
-            if (event.getEntity().getEntityId()==logic.getStands().get(player).getEntityId()){
-                event.setCancelled(true);
-            }
         }
 
 
 
 
-    }
 }

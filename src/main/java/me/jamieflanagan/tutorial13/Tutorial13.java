@@ -27,8 +27,8 @@ public final class Tutorial13 extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new LeashBreakEvent(this),this);
         getServer().getPluginManager().registerEvents(new EntityDamageEvent(gameLogic),this);
         getServer().getPluginManager().registerEvents(new ItemClickListener(gameLogic),this);
-        getServer().getPluginManager().registerEvents(new PlayerRespawnListener(gameLogic),this);
-        getServer().getPluginManager().registerEvents(new PlayerDeathListener(gameLogic),this);
+        getServer().getPluginManager().registerEvents(new PlayerRespawnListener(gameLogic,this),this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(gameLogic,this),this);
         getServer().getPluginManager().registerEvents(new AttackListener(),this);
 
     }

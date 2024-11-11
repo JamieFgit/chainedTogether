@@ -28,11 +28,7 @@ public class Logic {
         pullStrength = 0.01;
 
     }
-
     TeamManager teamManager = new TeamManager();
-
-    HashMap<Player, ArmorStand> stands = new HashMap<>();
-
 
     HashMap<Player, ArrayList<Player>> tiedPlayers = new HashMap<>();
 
@@ -40,16 +36,10 @@ public class Logic {
         return tiedPlayers;
     }
 
-    public HashMap<Player, ArmorStand> getStands() {
-        return stands;
-    }
 
     public void tetherPlayers(Player player1, Player player2) {
 
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "\n\n tetherplayers: " + player1.getName() + " " + player2.getName() + "\n\n");
-
-        spawnStandOnPlayer(player1);
-        spawnStandOnPlayer(player2);
 
         addTiedPlayers(player1,player2);
         addTiedPlayers(player2,player1);
@@ -60,50 +50,7 @@ public class Logic {
 
     }
 
-    public Boolean playerHasStandAlready(Player player) {
-        if (stands.containsKey(player)) {
-            return true;
-        }
-
-        return false;
-
-    }
-
-    public void spawnStandOnPlayer(Player player) {
-
-        if (!playerHasStandAlready(player)) {
-
-            ArmorStand stand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
-
-            PotionEffect invisibility = new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false);
-            PotionEffect regeneration = new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 255, true, false);
-            PotionEffect absorption = new PotionEffect(PotionEffectType.ABSORPTION, Integer.MAX_VALUE, 255, true, false);
-
-            stand.addPotionEffect(invisibility);
-            stand.addPotionEffect(regeneration);
-            stand.addPotionEffect(absorption);
-
-            stand.setGravity(false);
-            stand.setInvulnerable(true);
-            stand.setSilent(true);
-            //stand.setSize(0);
-            stand.setAI(false);
-            stand.setMarker(true);
-
-
-            teamManager.createTeam(player.getName());
-            //teamManager.addPlayerToTeam(player, player.getName());
-            //teamManager.addEntityToTeam(stand, player.getName());
-
-            stand.setInvisible(true);
-
-            stands.put(player, stand);
-
-        }
-    }
-
     public boolean canCreateTetherGroup(Player player) {
-
 
         for (Object object : tetherGroups.keySet()) {
             if (object instanceof Player host) {
@@ -111,7 +58,6 @@ public class Logic {
                 if (host.equals(player)) {
 
                     return false;
-
 
                 }
             }
@@ -123,7 +69,6 @@ public class Logic {
     public void createTetherGroup(Player player) {
 
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "\n\n calling createTetherGroup \n\n");
-
 
         if (canCreateTetherGroup(player)) {
 
@@ -261,45 +206,35 @@ public class Logic {
 
     double triggerDistance;
 
+    Boolean canPull = true;
+
+    public void setCanPull(Boolean canPull) {
+        this.canPull = canPull;
+    }
+
     public void pullPlayers(Player player1, Player player2) {
 
-        double separation = player2.getLocation().distance(player1.getLocation());
+        if (canPull) {
+            double separation = player2.getLocation().distance(player1.getLocation());
 
-        Vector player1Location = player1.getLocation().toVector();
-        Vector player2Location = player2.getLocation().toVector();
+            Vector player1Location = player1.getLocation().toVector();
+            Vector player2Location = player2.getLocation().toVector();
 
-        if (separation > triggerDistance) {
-            // Calculate direction from player1 to player2
-            Vector direction = player2Location.subtract(player1Location).normalize();
+            if (separation > triggerDistance) {
+                // Calculate direction from player1 to player2
+                Vector direction = player2Location.subtract(player1Location).normalize();
 
-            // Player 1 is pulled towards Player 2
-            Vector velocity1 = direction.multiply(pullStrength * separation*separation);
-            player1.setVelocity(velocity1);
+                // Player 1 is pulled towards Player 2
+                Vector velocity1 = direction.multiply(pullStrength * separation * separation);
+                player1.setVelocity(velocity1);
 
-            // Player 2 is pulled towards Player 1 (reverse direction)
-            Vector velocity2 = direction.multiply(-pullStrength * separation* separation); // Reverse direction
-            player2.setVelocity(velocity2);
+                // Player 2 is pulled towards Player 1 (reverse direction)
+                Vector velocity2 = direction.multiply(-pullStrength * separation * separation); // Reverse direction
+                player2.setVelocity(velocity2);
+            }
         }
     }
 
-
-
-    public void addTiedPlayers(Player mainPlayer, Player ropedPlayer1, Player ropedPlayer2) {
-
-        if (tiedPlayers.get(mainPlayer) != null) {
-
-            tiedPlayers.get(mainPlayer).add(ropedPlayer1);
-            tiedPlayers.get(mainPlayer).add(ropedPlayer2);
-        } else {
-
-            ArrayList<Player> players = new ArrayList<>();
-            players.add(ropedPlayer1);
-            players.add(ropedPlayer2);
-
-            tiedPlayers.put(mainPlayer, players);
-        }
-
-    }
 
     public void addTiedPlayers(Player mainPlayer, Player ropedPlayer1) {
 

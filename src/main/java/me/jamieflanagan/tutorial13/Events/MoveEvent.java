@@ -22,14 +22,8 @@ public class MoveEvent implements Listener {
     public void onPlayerMove(PlayerMoveEvent event){
         Player player = event.getPlayer();
 
-
-
-        if (logic.getStands().containsKey(player)) {
-            Entity entity = logic.getStands().get(player);
-            entity.teleport(player.getLocation().add(0, 0.5, 0));
-            entity.setVelocity(player.getVelocity());
             logic.pushPlayerTowardsTiedPlayers(player);
-        }
+
 
 
 
